@@ -215,6 +215,7 @@ def choosing_language(update: Update, context: CallbackContext):
 
     if user_language in language:
         language_code = language_dictionary[user_language]
+
         check_generated = "_g" in language_code
         if check_generated:
             transcript_list = context.user_data["transcript_list"]
@@ -265,6 +266,13 @@ def translate(update: Update, context: CallbackContext):
     translate_list = transcript.translation_languages
     button_list = []
     translate_dictionary = {}
+
+    # Add Burmese as first translation option
+    burmese = {"language": "Burmese", "language_code": "my"}
+    translate_dictionary["Burmese"] = "my"
+    button_list.append([InlineKeyboardButton(text="Burmese", callback_data="Burmese")])
+
+    # Add rest of translation languages
     for i in range(0, len(translate_list), 2):
         language = translate_list[i]["language"]
         language_code = translate_list[i]["language_code"]
@@ -279,6 +287,7 @@ def translate(update: Update, context: CallbackContext):
             translate_button = [InlineKeyboardButton(
                 text=language, callback_data=language)]
         button_list.append(translate_button)
+
     button_list, page_no = button_formater(button_list)
     button_list_markup = InlineKeyboardMarkup(button_list[1])
     context.user_data["translate_dictionary"] = translate_dictionary
@@ -457,7 +466,7 @@ def done(update: Update, context: CallbackContext):
 def main():
     persistence = PicklePersistence(filename="Youtube_link")
     try:
-        updater = Updater(token=os.getenv("API_TOKEN"),
+        updater = Updater(token=os.getenv("BOT_TOKEN"),
                           persistence=persistence)
         dispatcher = updater.dispatcher
         AUTH = [int(i) for i in os.getenv("OWNER").split(" ")]

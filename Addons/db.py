@@ -1,9 +1,9 @@
 from redis import Redis
 ## uncomment the comment below when testing bot using .env
-# from dotenv import load_dotenv 
+from dotenv import load_dotenv 
 import logging
 ##uncomment this after filling the .env folder
-# load_dotenv() 
+load_dotenv() 
 import os
 
 logging.basicConfig(
@@ -23,10 +23,9 @@ except Exception as e:
     log.exception(e)
     exit(1)
 
-REDIS_URI = REDIS_URI.split(":")
 db = Redis(
-    host=REDIS_URI[0],
-    port=REDIS_URI[1],
+    host=REDIS_URI.split(":")[0],
+    port=REDIS_URI.split(":")[1],
     password=REDIS_PASSWORD,
     decode_responses=True
 )
